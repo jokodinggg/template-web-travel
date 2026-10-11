@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run validate-config
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  e2e:
+    needs: check
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
+      RESEND_API_KEY: ${{ secrets.E2E_RESEND_API_KEY }}
+    steps:
+      - name: Skip when E2E secrets are not configured
+        if: env.DATABASE_URL == '' || env.RESEND_API_KEY == ''
+        run: echo "E2E_DATABASE_URL / E2E_RESEND_API_KEY belum diset, e2e dilewati."
+      - uses: actions/checkout@v4
+        if: env.DATABASE_URL != '' && env.RESEND_API_KEY != ''
+      - uses: actions/setup-node@v4
+        if: env.DATABASE_URL != '' && env.RESEND_API_KEY != ''
+        with:
+          node-version: 22
+          cache: npm
+      - if: env.DATABASE_URL != '' && env.RESEND_API_KEY != ''
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npm run db:push -- --force
+          npm run test:e2e
