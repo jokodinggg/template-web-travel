@@ -1,1 +1,59 @@
 @import "tailwindcss";
+
+/* Nilai --brand-* diisi dari config.theme di layout.tsx. */
+@theme inline {
+  --color-primary: var(--brand-primary);
+  --color-primary-foreground: var(--brand-primary-foreground);
+  --color-accent: var(--brand-accent);
+  --color-accent-foreground: var(--brand-accent-foreground);
+  --color-background: var(--brand-background);
+  --color-foreground: var(--brand-foreground);
+  --color-muted: var(--brand-muted);
+  --color-surface: color-mix(in oklab, var(--brand-background) 45%, white);
+  --color-line: color-mix(in oklab, var(--brand-foreground) 14%, transparent);
+  --radius-brand: var(--brand-radius);
+  --font-heading: var(--brand-font-heading), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--brand-font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Fade-in saat elemen masuk viewport. Hanya aktif jika browser mendukung scroll-driven animation
+   dan pengguna tidak meminta gerak dikurangi, sehingga konten selalu terlihat tanpa JavaScript. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
