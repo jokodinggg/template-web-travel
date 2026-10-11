@@ -6,6 +6,7 @@ import { OwnerNotification } from "@/emails/OwnerNotification";
 import type { BookingSummary, EmailTheme } from "@/emails/shared";
 import { estimateTotal, formatDate, formatPrice, generateBookingCode, todayInTimeZone } from "./booking";
 import { type BookingFieldErrors, buildBookingSchema, toFieldErrors } from "./booking-schema";
+import { HONEYPOT_FIELD } from "./honeypot";
 import { fill } from "./text";
 import { readableOn } from "./theme";
 
@@ -30,7 +31,6 @@ export type SubmitBookingDeps = {
   logError?: (message: string, error: unknown) => void;
 };
 
-export const HONEYPOT_FIELD = "website";
 export const RATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 };
 const MAX_CODE_ATTEMPTS = 3;
 

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { BookingSelectionProvider, useBookingSelection } from "@/components/booking/booking-selection-provider";
 import { Header } from "@/components/layout/header";
 import { renderSections } from "@/components/sections/registry";
@@ -9,6 +9,8 @@ import { HeroSearch } from "@/components/trips/hero-search";
 import { TripFilterProvider } from "@/components/trips/trip-filter-provider";
 import { TripsExplorer } from "@/components/trips/trips-explorer";
 import { makeConfig } from "../fixtures";
+
+vi.mock("@/app/actions/booking", () => ({ submitBooking: vi.fn() }));
 
 const config = makeConfig();
 
