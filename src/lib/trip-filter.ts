@@ -16,6 +16,11 @@ export function isFilterEmpty(filter: TripFilter): boolean {
   return Object.values(filter).every((v) => v.trim() === "");
 }
 
+/** Kunci stabil untuk me-remount form filter saat filter berubah. */
+export function filterKey(filter: TripFilter): string {
+  return [filter.query, filter.categoryId, filter.budgetId, filter.month].join("|");
+}
+
 type FilterContext = { budgets: Budget[]; today?: string | null };
 
 export function filterTrips(trips: Trip[], filter: TripFilter, { budgets, today }: FilterContext): Trip[] {
