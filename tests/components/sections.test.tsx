@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BookingSelectionProvider, useBookingSelection } from "@/components/booking/booking-selection-provider";
 import { Header } from "@/components/layout/header";
 import { renderSections } from "@/components/sections/registry";
@@ -77,6 +77,10 @@ describe("Header", () => {
 });
 
 describe("trip search and cards", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-10-12T03:00:00Z") });
+  });
+
   it("applies the hero search to the trip grid on Explore", async () => {
     const user = userEvent.setup();
     renderExplorer();
